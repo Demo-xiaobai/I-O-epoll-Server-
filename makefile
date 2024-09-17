@@ -1,16 +1,15 @@
 src = $(wildcard *.c)
-obj = $(patsubst %.c, %.o, $(src))
+targets = $(patsubst %.c, %, $(src))
 
-all: server client
+CC = gcc
+CFLAGS = -lpthread -Wall -g 
 
-server: server.o wrap.o
-	gcc server.o wrap.o -o server -Wall
-client: client.o wrap.o
-	gcc client.o wrap.o -o client -Wall
+all:$(targets)
 
-%.o:%.c
-	gcc -c $< -Wall
+$(targets):%:%.c
+	$(CC) $< -o $@ $(CFLAGS)
 
-.PHONY: clean all
-clean: 
-	-rm -rf server client $(obj)
+.PHONY:clean all
+clean:
+	-rm -rf $(targets) 
+
